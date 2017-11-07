@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"flag"
 	"./xor"
-	"unicode/utf8"
+//	"unicode/utf8"
 	"encoding/hex"
 //	b64 "encoding/base64"
 )
@@ -48,7 +48,7 @@ func main() {
 			xordecrypted := xor.EncryptDecrypt(string(hexdecoded),string(keys[index]))
 			if isReadableASCII(xordecrypted) {
 //				fmt.Println(xordecrypted)
-				fmt.Println(utf8.ValidString(xordecrypted))
+				fmt.Println(xordecrypted)
 			}
 		}
 
