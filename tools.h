@@ -4,9 +4,8 @@
 //not used
 #define CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ.;'()"
 
-u_int8_t xorstr(u_int8_t* input, u_int8_t* key, u_int8_t* output) {
+u_int8_t xorstr(u_int8_t* input, u_int8_t* key, u_int8_t* output, size_t size, size_t keysize) {
 	unsigned int i,o;
-	size_t keysize = strlen(key), size = strlen(input);
 	for(i = 0; i < size; i+=keysize){
 		for(o = 0; o < keysize; o++){	
 			if(i+o < size-1)
@@ -16,9 +15,9 @@ u_int8_t xorstr(u_int8_t* input, u_int8_t* key, u_int8_t* output) {
 }
 
 int not_readable_chars(u_int8_t stringc[], size_t size){
-	unsigned int c = 0;
-	for(int i = 0; i < size; i++){
-		if(stringc[i] < ' ' || stringc[i] > '~')
+	unsigned long int c = 0;
+	for(long int i = 0; i < size; i++){
+		if((stringc[i] < ' ' || stringc[i] > '~') && stringc[i] != '\n')
 			c++;
 	}
 	return c;

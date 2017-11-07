@@ -18,7 +18,6 @@ void base64_encode(u_int8_t *input, u_int8_t *output, size_t size) {
 	}
 }
 
-
 size_t base64_decode(u_int8_t *input, u_int8_t *output) {
 	u_int8_t temp[4];
 
@@ -30,13 +29,23 @@ size_t base64_decode(u_int8_t *input, u_int8_t *output) {
 	output[0] = temp[0] << 2 | temp[1] >> 4;
 	output[1] = temp[1] << 4 | temp[2] >> 2;
 	output[2] = temp[2] << 6 | temp[3];
-
 	if(input[3] == '='){
 		if(input[2] == '=')
 			return 1;
 		return 2;
 	}
 	return 3;
+}
+
+u_int8_t * base64_decode_direct(u_int8_t * input, u_int8_t * output, size_t size){
+	//static u_int8_t output[sizeof(input)/4*3];
+	//size_t size;
+	for(int i = 0; i < strlen(input);i+=4){
+		size = base64_decode(&input[i], &output[i/4*3]);
+	}
+	//int endsize = sizeof(output)-3+size;
+//	memcpy(output,output,endsize);
+	return output;
 }
 
 
