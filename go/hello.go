@@ -46,8 +46,9 @@ func main() {
 
 		for index, _ := range keys {
 			xordecrypted := xor.EncryptDecrypt(string(hexdecoded),string(keys[index]))
-			if utf8.ValidString(xordecrypted) {
-				fmt.Println(xordecrypted)
+			if isReadableASCII(xordecrypted) {
+//				fmt.Println(xordecrypted)
+				fmt.Println(utf8.ValidString(xordecrypted))
 			}
 		}
 
@@ -57,4 +58,14 @@ func main() {
 	if err := stdinLine.Err(); err != nil {
 		fmt.Fprintln(os.Stderr, "reading standard input:", err)
 	}
+}
+
+
+func isReadableASCII(input string) (output bool){
+	for _, currentByte := range []byte(input) {
+		if currentByte < ' ' || currentByte > '~' && currentByte != '\n' {
+			return false
+		}
+	}
+	return true
 }
