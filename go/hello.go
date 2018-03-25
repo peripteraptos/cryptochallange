@@ -13,46 +13,44 @@ import (
 	"encoding/hex"
 //	b64 "encoding/base64"
 )
-const (
-	MaxScanTokenSize = 64* 1024
-)
 
 func main() {
-
+	keylistAttack := flag.Bool("k", false, "keylist attack - use with -keylist=keylist (format \"key\\n\")");
 	keylistFilename := flag.String("keylist", "keylist", "a file")
+
 	flag.Parse()
 
-	//fmt.Printf("%s", *keyfile)
-	keylist, err := ioutil.ReadFile(*keylistFilename);
-	if err != nil {
-		log.Fatal(err)
+	var keys string
+
+	if *keylistAttack {
+		keylist, err := ioutil.ReadFile(*keylistFilename);
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		keys := strings.Split(string(keylist),"\n")
+		fmt.Println(keys)
+	}else{
+		for i := 0; i < 256; i++{
+			keys += string(i)
+		}
 	}
 
-
-//	fmt.Printf("%s\n",keylist)
-	keys := strings.Split(string(keylist),"\n")	
-	fmt.Println(keys)
-
-
-
 	stdinLine := bufio.NewScanner(os.Stdin)
+
 	for stdinLine.Scan() {
 		hexdecoded, err := hex.DecodeString(stdinLine.Text())
 		if err != nil {
 			log.Fatal(err)
 		}
 
-
-
-		for index, _ := range keys {
-			xordecrypted := xor.EncryptDecrypt(string(hexdecoded),string(keys[index]))
+		for _,key := range keys {
+			xordecrypted := xor.EncryptDecrypt(string(hexdecoded),string(key))
 			if isReadableASCII(xordecrypted) {
-//				fmt.Println(xordecrypted)
 				fmt.Println(xordecrypted)
 			}
 		}
-
-//		fmt.Println(decoded) // Println will add back the final '\n'
 	}
 
 	if err := stdinLine.Err(); err != nil {
@@ -60,10 +58,9 @@ func main() {
 	}
 }
 
-
 func isReadableASCII(input string) (output bool){
 	for _, currentByte := range []byte(input) {
-		if currentByte < ' ' || currentByte > '~' && currentByte != '\n' {
+		if int(currentByte) < ' ' || int(currentByte) > '~' && int(currentByte) != '\n' {
 			return false
 		}
 	}

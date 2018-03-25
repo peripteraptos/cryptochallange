@@ -14,3 +14,23 @@ func EncryptDecrypt(input, key string) (output string) {
 
         return output
 }
+/*
+func BreakXor(input []byte, keylen int) (output string) {
+	var key [keylen]byte
+
+	for a := 0; a < keylen; a++ {
+		for b := 0; b < 255; b++ {
+			for c := 0; c < len(input); c++ {
+				result = string(input[i] ^ key[i % len(key)])
+			}
+			key[a]++;
+		}
+	}
+}
+
+func generateKeys(keylen int) (output [][]byte){
+	for a := 0; a < keylen; a++{
+}
+}
+
+*/
